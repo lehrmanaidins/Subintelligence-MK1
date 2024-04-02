@@ -12,11 +12,11 @@
 
 # import matplotlib.pyplot as plt
 import numpy as np
-from math import e
+from math import e, sqrt
 import random
 import csv
 
-shading = ' ░▒▓█'
+shading = '.░▒▓█'
 
 def main():
     '''
@@ -27,32 +27,86 @@ def main():
             print_image(image)
     '''
 
-    # generate_training_data(u'./data/shapes', 1, 28, 28)
+    # generate_training_data(u'./data/shapes', 10, 10, 10)
 
-    with open('./data/digits/digit_0.csv', 'r', encoding='utf-8') as file:
-        image = []
-        for line in file:
-            image.append(map(lambda value: float(value) / 255, line.split(',')))
-        print_image(image)
+    '''
+    for i in range(10):
+        with open(f'./data/shapes/shape_{i}.csv', 'r', encoding='utf-8') as file:
+            image = []
+            for line in file:
+                image.append(map(lambda value: float(value) / 255, line.split(',')))
+            print_image(image)
+    '''
 
-    # weights: list[list[float]] = np.zeros((28, 28))
+    image = generate_circle(50, 50)
+
+    # [print(line) for line in image]
+
+    print_image(image)
 
 def generate_training_data(folder: str, n: int, image_width: int, image_height: int) -> None:
     for i in range(n):
-        image: list[list[float]] = [[]]
+        image: list[list[float]] = []
         if (random.randint(0, 1) == 0):
             image = generate_circle(image_width, image_height)
         else:
             image = generate_rectangle(image_width, image_height)
         
+        image = [[int(value) for value in line] for line in image]
+
         np.savetxt(f'{folder}/shape_{i}.csv', image, delimiter=',')
 
 def generate_rectangle(image_width: int, image_height: int) -> list[list[float]]:
-    image = np.random.rand(image_width, image_height)
+    min_height: int = 2
+    min_width: int = 3
+
+    point_top_left: tuple[int, int] = (
+        np.random.randint(0, image_width - min_width), 
+        np.random.randint(0, image_height - min_height)
+    )
+
+    point_bottom_right: tuple[int, int] = (
+        np.random.randint(point_top_left[0] + min_width, image_width + 1),
+        np.random.randint(point_top_left[1] + min_height, image_height + 1)
+    )
+
+    image = np.zeros((image_height, image_width))
+
+    for y in range(point_top_left[1], point_bottom_right[1]):
+        for x in range(point_top_left[0], point_bottom_right[0]):
+            image[y][x] = 1.0
+
     return image
 
 def generate_circle(image_width: int, image_height: int) -> list[list[float]]:
-    image = np.random.rand(image_width, image_height)
+    min_radius: int = 3
+
+    # Randomly generate the center point of the circle
+    center_point: tuple[int, int] = (
+        np.random.randint(min_radius, image_width - min_radius),
+        np.random.randint(min_radius, image_height - min_radius)
+    )
+
+    # Randomly generate the radius within the allowable range
+    radius = np.random.randint(min_radius, 10)
+
+    # Create an empty image
+    image = np.zeros((image_height, image_width))
+
+    # Fill the circle in the image
+    for y in range(image_height):
+        for x in range(image_width):
+            # Check if the point (x, y) is inside the circle
+            distance_from_center: float = sqrt((center_point[0] - x) ** 2 + (center_point[1] - y) ** 2)
+
+            if (distance_from_center < radius):
+                image[y][x] = 1.0
+                continue
+
+            scaled_value: float = min(1.0 / (distance_from_center - radius), 1.0)
+
+            image[y][x] = scaled_value
+
     return image
 
 def print_image(image: list[list[float]]) -> None:
@@ -62,6 +116,7 @@ def print_image(image: list[list[float]]) -> None:
             print(f'{shading[scaled_value] * 2}', end='')
 
         print('\n', end='')
+    print('\n', end='')
 
 def sigmoid(value: float) -> float:
     ''' Constrains all values between [0.0, 1.0] using Sigmoid function
