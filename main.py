@@ -19,46 +19,37 @@ import csv
 shading = '.░▒▓█'
 
 def main():
-    '''
-    with open('./data/digits/train.csv', 'rt', encoding='utf-8') as file:
-        file.readline()
-        for _ in range(100):
-            image: list[int] = map(int, file.readline().split(','))
-            print_image(image)
-    '''
+    generate_training_data(u'./training_data/shapes/', n = 10, image_width = 25, image_height = 25)
 
-    # generate_training_data(u'./data/shapes', 10, 10, 10)
-
-    '''
     for i in range(10):
-        with open(f'./data/shapes/shape_{i}.csv', 'r', encoding='utf-8') as file:
-            image = []
-            for line in file:
-                image.append(map(lambda value: float(value) / 255, line.split(',')))
+        with open(f'./training_data/shapes/shape_{i}.csv', 'r', encoding='utf-8') as file:
+            image: list[list[float]] = read_image_file(file)
             print_image(image)
-    '''
 
-    image = generate_circle(50, 50)
-
-    # [print(line) for line in image]
-
-    print_image(image)
-
-def generate_training_data(folder: str, n: int, image_width: int, image_height: int) -> None:
+def generate_training_data(folder: str, *, n: int, image_width: int, image_height: int) -> None:
+    with open(u'./training_data/shapes/answers.csv', 'w', encoding='utf-8') as answers:
+        answers.write('File_Name, Shape_Name\n')
+    
     for i in range(n):
         image: list[list[float]] = []
+        shape = ''
         if (random.randint(0, 1) == 0):
             image = generate_circle(image_width, image_height)
+            shape = 'circle'
         else:
             image = generate_rectangle(image_width, image_height)
+            shape = 'rectangle'
         
         image = [[int(value) for value in line] for line in image]
 
         np.savetxt(f'{folder}/shape_{i}.csv', image, delimiter=',')
 
+        with open(u'./training_data/shapes/answers.csv', 'a', encoding='utf-8') as answers:
+            answers.write(f'shape_{i}.csv, {shape}\n')
+
 def generate_rectangle(image_width: int, image_height: int) -> list[list[float]]:
-    min_height: int = 2
-    min_width: int = 3
+    min_height: int = 3
+    min_width: int = 10
 
     point_top_left: tuple[int, int] = (
         np.random.randint(0, image_width - min_width), 
@@ -80,15 +71,16 @@ def generate_rectangle(image_width: int, image_height: int) -> list[list[float]]
 
 def generate_circle(image_width: int, image_height: int) -> list[list[float]]:
     min_radius: int = 3
+    max_radius: int = 10
+
+    # Randomly generate the radius within the allowable range
+    radius = np.random.randint(min_radius, max_radius)
 
     # Randomly generate the center point of the circle
     center_point: tuple[int, int] = (
-        np.random.randint(min_radius, image_width - min_radius),
-        np.random.randint(min_radius, image_height - min_radius)
+        np.random.randint(radius, image_width - radius),
+        np.random.randint(radius, image_height - radius)
     )
-
-    # Randomly generate the radius within the allowable range
-    radius = np.random.randint(min_radius, 10)
 
     # Create an empty image
     image = np.zeros((image_height, image_width))
@@ -99,7 +91,7 @@ def generate_circle(image_width: int, image_height: int) -> list[list[float]]:
             # Check if the point (x, y) is inside the circle
             distance_from_center: float = sqrt((center_point[0] - x) ** 2 + (center_point[1] - y) ** 2)
 
-            if (distance_from_center < radius):
+            if (distance_from_center <= radius):
                 image[y][x] = 1.0
                 continue
 
@@ -107,6 +99,12 @@ def generate_circle(image_width: int, image_height: int) -> list[list[float]]:
 
             image[y][x] = scaled_value
 
+    return image
+
+def read_image_file(file) -> list[list[float]]:
+    image = []
+    for line in file:
+        image.append(map(lambda value: float(value), line.split(',')))
     return image
 
 def print_image(image: list[list[float]]) -> None:
