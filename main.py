@@ -11,20 +11,40 @@
 '''
 
 # import matplotlib.pyplot as plt
+from PIL import Image
 import numpy as np
-from math import e, sqrt
+from math import e, sqrt, floor
 import random
 import csv
 
 shading = '.░▒▓█'
 
 def main():
-    generate_training_data(u'./training_data/shapes/', n = 10, image_width = 25, image_height = 25)
+    n: int = 10
+    generate_training_data(u'./training_data/shapes/', n = n, image_width = 50, image_height = 50)
 
-    for i in range(10):
+    for i in range(n):
         with open(f'./training_data/shapes/shape_{i}.csv', 'r', encoding='utf-8') as file:
-            image: list[list[float]] = read_image_file(file)
-            print_image(image)
+            image_data: list[list[float]] = read_image_file(file)
+
+            # Convert the list elements to integers and map values to [0, 255] range
+            image_data = list(
+                map(
+                    lambda line: list(
+                        map(
+                            lambda value: int(floor(value * 255)), line
+                        )
+                    ),
+                    image_data
+                )
+            )
+
+            # Convert the NumPy array to PIL Image and save as PNG
+            Image.fromarray(np.array(image_data).astype('uint8')).save(f'./training_data/shapes/images/image_{i}.png')
+
+            # print_image(image)
+
+            print(f'\t===\t{i + 1}/{n}\t===\t', end='\r')
 
 def generate_training_data(folder: str, *, n: int, image_width: int, image_height: int) -> None:
     with open(u'./training_data/shapes/answers.csv', 'w', encoding='utf-8') as answers:
@@ -71,7 +91,7 @@ def generate_rectangle(image_width: int, image_height: int) -> list[list[float]]
 
 def generate_circle(image_width: int, image_height: int) -> list[list[float]]:
     min_radius: int = 3
-    max_radius: int = 10
+    max_radius: int = 20
 
     # Randomly generate the radius within the allowable range
     radius = np.random.randint(min_radius, max_radius)
@@ -94,10 +114,11 @@ def generate_circle(image_width: int, image_height: int) -> list[list[float]]:
             if (distance_from_center <= radius):
                 image[y][x] = 1.0
                 continue
-
+            
+            '''
             scaled_value: float = min(1.0 / (distance_from_center - radius), 1.0)
-
             image[y][x] = scaled_value
+            '''
 
     return image
 
