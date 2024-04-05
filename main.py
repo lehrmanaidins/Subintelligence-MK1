@@ -13,16 +13,15 @@
 # import matplotlib.pyplot as plt
 from PIL import Image
 import numpy as np
-from math import e, sqrt, floor
+import math
 import random
-import csv
-
-shading = '.░▒▓█'
 
 def main():
-    n: int = 10
+    n: int = 100
     generate_training_data(u'./training_data/shapes/', n = n, image_width = 50, image_height = 50)
 
+
+    print(f'Saving Training Data Images to \'./training_data/shapes\' ...')
     for i in range(n):
         with open(f'./training_data/shapes/shape_{i}.csv', 'r', encoding='utf-8') as file:
             image_data: list[list[float]] = read_image_file(file)
@@ -32,7 +31,7 @@ def main():
                 map(
                     lambda line: list(
                         map(
-                            lambda value: int(floor(value * 255)), line
+                            lambda value: int(math.floor(value * 255)), line
                         )
                     ),
                     image_data
@@ -44,9 +43,14 @@ def main():
 
             # print_image(image)
 
-            print(f'\t===\t{i + 1}/{n}\t===\t', end='\r')
+            print(f'\t{math.floor((i + 1) / n * 100): .0f}%\t[{"■" * int((i / n) * 50)}{" " * (50 - int((i / n) * 50) - 1)}]\t({i + 1}/{n})\t\t', end='\r')
+    
+    print('\n\n', end='')
+        
 
 def generate_training_data(folder: str, *, n: int, image_width: int, image_height: int) -> None:
+    print(f'Generating Training Data {{n = {n}, image_width = {image_width}, image_height = {image_height}}} ...')
+
     with open(u'./training_data/shapes/answers.csv', 'w', encoding='utf-8') as answers:
         answers.write('File_Name, Shape_Name\n')
     
@@ -66,6 +70,10 @@ def generate_training_data(folder: str, *, n: int, image_width: int, image_heigh
 
         with open(u'./training_data/shapes/answers.csv', 'a', encoding='utf-8') as answers:
             answers.write(f'shape_{i}.csv, {shape}\n')
+
+        print(f'\t{math.floor((i + 1) / n * 100): .0f}%\t[{"■" * int((i / n) * 50)}{" " * (50 - int((i / n) * 50) - 1)}]\t({i + 1}/{n})\t\t', end='\r')
+    
+    print('\n\n', end='')
 
 def generate_rectangle(image_width: int, image_height: int) -> list[list[float]]:
     min_height: int = 3
@@ -109,7 +117,7 @@ def generate_circle(image_width: int, image_height: int) -> list[list[float]]:
     for y in range(image_height):
         for x in range(image_width):
             # Check if the point (x, y) is inside the circle
-            distance_from_center: float = sqrt((center_point[0] - x) ** 2 + (center_point[1] - y) ** 2)
+            distance_from_center: float = math.sqrt((center_point[0] - x) ** 2 + (center_point[1] - y) ** 2)
 
             if (distance_from_center <= radius):
                 image[y][x] = 1.0
@@ -128,7 +136,7 @@ def read_image_file(file) -> list[list[float]]:
         image.append(map(lambda value: float(value), line.split(',')))
     return image
 
-def print_image(image: list[list[float]]) -> None:
+def print_image(image: list[list[float]], shading: str = '.░▒▓█') -> None:
     for line in image:
         for value in line:
             scaled_value: int = int(value * (len(shading) * (1 - 1e-10)))
@@ -140,7 +148,7 @@ def print_image(image: list[list[float]]) -> None:
 def sigmoid(value: float) -> float:
     ''' Constrains all values between [0.0, 1.0] using Sigmoid function
     '''
-    value = 1 / (1 + (e ** -value))
+    value = 1 / (1 + (math.e ** -value))
     return value
 
 if __name__ == '__main__':
