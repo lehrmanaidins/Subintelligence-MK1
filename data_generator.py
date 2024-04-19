@@ -1,13 +1,11 @@
 
 '''
-    Data Generator
+    Circle And Rectangle Data Generator
 
     File: data_generator.py
     Author: Aidin Lehrman
-    Version: 03-28-2024
+    Version: 04-19-2024
 
-    Refernces:
-        Training Data: https://github.com/zhaodelong/machine-learning-classify-handwritten-digit/tree/master/randomForest
 '''
 
 
@@ -85,7 +83,7 @@ def save_training_data(folder: str, training_data: list[list[list[float]]]) -> N
 
 def generate_rectangle(image_width: int, image_height: int) -> list[list[float]]:
     min_height: int = 3
-    min_width: int = 10
+    min_width: int = 20
 
     point_top_left: tuple[int, int] = (
         np.random.randint(0, image_width - min_width), 
@@ -108,7 +106,7 @@ def generate_rectangle(image_width: int, image_height: int) -> list[list[float]]
 
 def generate_circle(image_width: int, image_height: int) -> list[list[float]]:
     min_radius: int = 3
-    max_radius: int = 20
+    max_radius: int = 25
 
     # Randomly generate the radius within the allowable range
     radius = np.random.randint(min_radius, max_radius)
@@ -157,13 +155,6 @@ def print_image(image: list[list[float]], shading: str = '.░▒▓█') -> Non
 
         print('\n', end='')
     print('\n', end='')
-
-
-def sigmoid(value: float) -> float:
-    ''' Constrains all values between [0.0, 1.0] using Sigmoid function
-    '''
-    value = 1 / (1 + (math.e ** -value))
-    return value
 
 
 if __name__ == '__main__':
