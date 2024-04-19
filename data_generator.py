@@ -2,7 +2,7 @@
 '''
     Data Generator
 
-    File: data_genorator.py
+    File: data_generator.py
     Author: Aidin Lehrman
     Version: 03-28-2024
 
