@@ -57,7 +57,7 @@ def sigmoid(value):
 
 
 def main():
-    num_samples = 10_000
+    num_samples = 1_000
 
     answers_file_path = os.path.join('.', 'training_data', 'shapes', 'answers.csv')
     training_data = generate_training_data(answers_file_path, n=num_samples, image_width=image_width, image_height=image_height)

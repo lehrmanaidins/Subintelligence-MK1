@@ -26,9 +26,6 @@ def main() -> None:
 def generate_training_data(answers_file: str, *, n: int, image_width: int, image_height: int) -> list[list[list[float]]]:
     
     print(f'Generating Training Data {{n = {n}, image_width = {image_width}, image_height = {image_height}}} ...')
-
-    with open(answers_file, 'w', encoding='utf-8') as answers:
-        answers.write('File_Name, Shape_Name\n')
     
     training_data: list[list[list[float]]] = []
     
@@ -46,7 +43,7 @@ def generate_training_data(answers_file: str, *, n: int, image_width: int, image
         training_data.append(image)
 
         with open(u'./training_data/shapes/answers.csv', 'a', encoding='utf-8') as answers:
-            answers.write(f'shape_{i}.csv, {shape}\n')
+            answers.write(f'{shape}\n')
 
         print(f'\t{math.floor((i + 1) / n * 100): .0f}%\t[{"■" * int((i / n) * 50)}{" " * (50 - int((i / n) * 50) - 1)}]\t({i + 1}/{n})\t\t', end='\r')
     
