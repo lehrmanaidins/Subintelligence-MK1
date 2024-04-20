@@ -21,8 +21,20 @@ def test_network(test_data: list[list[float]], answers_csv_file: str, weight_csv
             row = [float(data.strip()) for data in line.split(',')]
             weights.append(row)
 
-    for image in test_data:
-        pass
+    with open(answers_csv_file, 'r', encoding='utf-8') as answers_file:
+        for image in test_data:
+            answer = answers_file.readline().strip()
+
+            raw_neural_network_output = np.dot(image, weights[0])
+            cleaned_neural_network_output = round(sigmoid(raw_neural_network_output))
+
+            desired_output: int = 1.0 if (answer == 'circle') else 0.0
+            
+            print(f'Output: {raw_neural_network_output:.1f}, Desired: {desired_output:.1f}')
+
+
+def sigmoid(value):
+    return 1 / (1 + np.exp(-value))
 
 
 def main():
