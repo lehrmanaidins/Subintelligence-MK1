@@ -29,23 +29,23 @@ def generate_training_data(answers_file: str, *, n: int, image_width: int, image
     
     training_data: list[list[list[float]]] = []
     
-    for i in range(n):
-        image: list[list[float]] = []
-        shape = ''
-        
-        if (random.randint(0, 1) == 0):
-            image = generate_circle(image_width, image_height)
-            shape = 'circle'
-        else:
-            image = generate_rectangle(image_width, image_height)
-            shape = 'rectangle'
+    with open(answers_file, 'w', encoding='utf-8') as answers:
+        for i in range(n):
+            image: list[list[float]] = []
+            shape = ''
+            
+            if (random.randint(0, 1) == 0):
+                image = generate_circle(image_width, image_height)
+                shape = 'circle'
+            else:
+                image = generate_rectangle(image_width, image_height)
+                shape = 'rectangle'
 
-        training_data.append(image)
+            training_data.append(image)
 
-        with open(answers_file, 'a', encoding='utf-8') as answers:
             answers.write(f'{shape}\n')
 
-        print(f'\t{math.floor((i + 1) / n * 100): .0f}%\t[{"■" * int((i / n) * 50)}{" " * (50 - int((i / n) * 50) - 1)}]\t({i + 1}/{n})\t\t', end='\r')
+            print(f'\t{math.floor((i + 1) / n * 100): .0f}%\t[{"■" * int((i / n) * 50)}{" " * (50 - int((i / n) * 50) - 1)}]\t({i + 1}/{n})\t\t', end='\r')
     
     print('\n\n', end='')
     
@@ -80,7 +80,7 @@ def save_training_data(folder: str, training_data: list[list[list[float]]]) -> N
 
 def generate_rectangle(image_width: int, image_height: int) -> list[list[float]]:
     min_height: int = 3
-    min_width: int = 20
+    min_width: int = 10
 
     point_top_left: tuple[int, int] = (
         np.random.randint(0, image_width - min_width), 
@@ -103,7 +103,7 @@ def generate_rectangle(image_width: int, image_height: int) -> list[list[float]]
 
 def generate_circle(image_width: int, image_height: int) -> list[list[float]]:
     min_radius: int = 3
-    max_radius: int = 25
+    max_radius: int = 7
 
     # Randomly generate the radius within the allowable range
     radius = np.random.randint(min_radius, max_radius)
