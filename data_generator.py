@@ -17,7 +17,7 @@ import random
 
 def main() -> None:
     
-    n: int = 1000
+    n: int = 1_000
     training_data: list[list[list[float]]] = generate_training_data(u'./training_data/shapes/answers.csv', n = n, image_width = 50, image_height = 50)
 
     save_training_data(u'./training_data/shapes/images', training_data)
@@ -25,7 +25,7 @@ def main() -> None:
 
 def generate_training_data(answers_file: str, *, n: int, image_width: int, image_height: int) -> list[list[list[float]]]:
     
-    print(f'Generating Training Data {{n = {n}, image_width = {image_width}, image_height = {image_height}}} ...')
+    print(f'Generating Training Data {{n = {n:,}, image_width = {image_width:,}, image_height = {image_height:,}}} ...')
     
     training_data: list[list[list[float]]] = []
     
@@ -42,7 +42,7 @@ def generate_training_data(answers_file: str, *, n: int, image_width: int, image
 
         training_data.append(image)
 
-        with open(u'./training_data/shapes/answers.csv', 'a', encoding='utf-8') as answers:
+        with open(answers_file, 'a', encoding='utf-8') as answers:
             answers.write(f'{shape}\n')
 
         print(f'\t{math.floor((i + 1) / n * 100): .0f}%\t[{"■" * int((i / n) * 50)}{" " * (50 - int((i / n) * 50) - 1)}]\t({i + 1}/{n})\t\t', end='\r')

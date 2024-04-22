@@ -25,9 +25,7 @@ output_neurons = 1
 weights = np.zeros((output_neurons, image_width * image_height))
 
 
-def train(training_data):
-
-    answers_file_path = os.path.join('.', 'training_data', 'shapes', 'answers.csv')
+def train(answers_file_path: str, training_data):
 
     with open(answers_file_path, 'r', encoding='utf-8') as answers_file:
 
@@ -38,7 +36,7 @@ def train(training_data):
             raw_neural_network_output = np.dot(image, weights[0])
             cleaned_neural_network_output = round(sigmoid(raw_neural_network_output))
 
-            desired_output = 1.0 if desired_output_str.split(',')[1].strip() == 'circle' else 0.0
+            desired_output = 1.0 if desired_output_str.strip() == 'circle' else 0.0
 
             error = desired_output - cleaned_neural_network_output
 
@@ -57,14 +55,14 @@ def sigmoid(value):
 
 
 def main():
-    num_samples = 1_000
+    num_samples = 100_000
 
-    answers_file_path = os.path.join('.', 'training_data', 'shapes', 'answers.csv')
+    answers_file_path = os.path.join('.', 'training_answers.csv')
     training_data = generate_training_data(answers_file_path, n=num_samples, image_width=image_width, image_height=image_height)
 
     training_data = [np.reshape(image, image_width * image_height) for image in training_data]
 
-    train(training_data)
+    train(answers_file_path, training_data)
 
 
 if __name__ == "__main__":
