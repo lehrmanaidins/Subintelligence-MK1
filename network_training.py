@@ -10,13 +10,11 @@
         https://docs.google.com/document/d/1SnwIpVScZHWpri4EMlm59nHwJLI09HBUE5iGSabQjfw/edit
 '''
 
-from PIL import Image
-
 import matplotlib.pyplot as plt
-
 import numpy as np
 import os
 from data_generator import generate_training_data
+
 
 image_width = 20
 image_height = 20
@@ -40,27 +38,36 @@ def train(answers_file_path: str, training_data):
 
             weights[0] += np.multiply(image, error)
 
-            fig, ax = plt.subplots()
-            mesh = ax.pcolormesh(np.arange(image_width), np.arange(image_height), np.reshape(weights[0], (image_width, image_height)))
-            cbar = plt.colorbar(mesh, ax=ax)
-            cbar.set_label('Pixel Values')
-            plt.show()
-            print(f'Shape: "{desired_output_str.strip()}", Output: {cleaned_neural_network_output:.1f}, Desired: {desired_output:.1f}')
+            # print(f'Shape: "{desired_output_str.strip()}", Output: {cleaned_neural_network_output:.1f}, Desired: {desired_output:.1f}')
 
     with open('./weights.csv', 'w', encoding='utf-8') as weight_file:
         weight_file.write(str(list(weights[0]))[1: -1])
 
+    '''
+        fig, ax = plt.subplots()
+        mesh = ax.pcolormesh(np.arange(image_width), np.arange(image_height), np.reshape(weights[0], (image_width, image_height)))
+        cbar = plt.colorbar(mesh, ax=ax)
+        cbar.set_label('Pixel Values')
+        plt.show()
+    '''
 
-def main():
-    num_samples = 100
+
+def main() -> None:
+    num_samples = 100_000
 
     answers_file_path = os.path.join('.', 'training_answers.csv')
+    
     training_data = generate_training_data(answers_file_path, n=num_samples, image_width=image_width, image_height=image_height)
+    flattened_training_data = [list(np.reshape(image, image_width * image_height)) for image in training_data]
 
-    training_data = [np.reshape(image, image_width * image_height) for image in training_data]
-
-    train(answers_file_path, training_data)
-
+    # It is necessary to cycle through and train with the same samples a couple of times.
+    cycles: int = 500
+    for i in range(cycles):
+        print(f'\r\tTraining ... ({i + 1}/{cycles}) Cycles', end='')
+        train(answers_file_path, flattened_training_data)
+        
+    print('\nDone Training.')
+    
 
 if __name__ == "__main__":
     main()
