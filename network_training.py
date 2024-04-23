@@ -20,13 +20,11 @@ import threading
 image_width = 20
 image_height = 20
 
+weights = np.zeros(image_width * image_height)
 
 def train(answers_file_path: str, training_data):
 
-    weights: list[float] = []
-
-    with open(u'weights.csv', 'r', encoding='utf-8') as weights_file:
-        weights = [float(data.strip()) for data in weights_file.readline().split(', ')]
+    global weights
 
     with open(answers_file_path, 'r', encoding='utf-8') as answers_file:
 
@@ -68,7 +66,7 @@ def train_cycles(answers_file_path, images, max_cycles: int) -> None:
     
 
 def main() -> None:
-    num_samples = 1_000
+    num_samples = 10_000
 
     answers_file_path = os.path.join('.', 'training_answers.csv')
     
