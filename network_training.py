@@ -10,20 +10,23 @@
         https://docs.google.com/document/d/1SnwIpVScZHWpri4EMlm59nHwJLI09HBUE5iGSabQjfw/edit
 '''
 
-import matplotlib.pyplot as plt
+
 import numpy as np
 import os
 from data_generator import generate_training_data
 import threading
 
+
 image_width = 20
 image_height = 20
-output_neurons = 1
-
-weights = np.zeros((output_neurons, image_width * image_height))
 
 
 def train(answers_file_path: str, training_data):
+
+    weights: list[float] = []
+
+    with open(u'weights.csv', 'r', encoding='utf-8') as weights_file:
+        weights = [float(data.strip()) for data in weights_file.readline().split(', ')]
 
     with open(answers_file_path, 'r', encoding='utf-8') as answers_file:
 
@@ -31,7 +34,7 @@ def train(answers_file_path: str, training_data):
 
         for image, desired_output_str in zip(training_data, answers_file):
 
-            raw_neural_network_output = np.dot(image, weights[0])
+            raw_neural_network_output = np.dot(image, weights)
             cleaned_neural_network_output = min(1.0, max(0.0, raw_neural_network_output))
 
             desired_output = 1.0 if desired_output_str.strip() == 'circle' else 0.0
@@ -41,10 +44,10 @@ def train(answers_file_path: str, training_data):
             if (desired_output == cleaned_neural_network_output):
                 guessed_correctly += 1
 
-            weights[0] += np.multiply(image, error)
+            weights += np.multiply(image, error)
 
     with open('./weights.csv', 'w', encoding='utf-8') as weight_file:
-        weight_file.write(str(list(weights[0]))[1: -1])
+        weight_file.write(str(list(weights))[1: -1])
 
     return guessed_correctly / len(training_data)
 
@@ -53,8 +56,9 @@ def train_cycles(answers_file_path, images, max_cycles: int) -> None:
     
     # It is necessary to cycle through and train with the same samples a couple of times.
     for i in range(max_cycles):
-        print(f'\r\tTraining ... ({i + 1}/{max_cycles}) Cycles', end='')
         percent_guess_correctly: float = train(answers_file_path, images)
+
+        print(f'\r\tTraining ... (#{i + 1}), Max Cycles: {max_cycles}. Percent Accuracy: {percent_guess_correctly * 100:.2f}%', end='')
 
         # Passed most tests
         if (percent_guess_correctly > 0.9999):
@@ -64,7 +68,7 @@ def train_cycles(answers_file_path, images, max_cycles: int) -> None:
     
 
 def main() -> None:
-    num_samples = 100_000
+    num_samples = 1_000
 
     answers_file_path = os.path.join('.', 'training_answers.csv')
     
