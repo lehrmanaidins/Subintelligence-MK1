@@ -40,7 +40,7 @@ def test_network(test_data, answers_csv_file: str, weight_csv_file: str) -> floa
 def main() -> None:
     image_width: int = 20
     image_height: int = 20
-    num_samples: int = 100
+    num_samples: int = 10_000
 
     test_data = np.array(generate_training_data(u'./test_answers.csv', n = num_samples, image_width = image_width, image_height = image_height))
     flattened_test_data = [list(np.reshape(image, image_width * image_height)) for image in test_data]

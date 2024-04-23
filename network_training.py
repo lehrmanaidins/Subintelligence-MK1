@@ -14,7 +14,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import os
 from data_generator import generate_training_data
-
+import threading
 
 image_width = 20
 image_height = 20
@@ -27,6 +27,8 @@ def train(answers_file_path: str, training_data):
 
     with open(answers_file_path, 'r', encoding='utf-8') as answers_file:
 
+        guessed_correctly: int = 0
+
         for image, desired_output_str in zip(training_data, answers_file):
 
             raw_neural_network_output = np.dot(image, weights[0])
@@ -36,21 +38,30 @@ def train(answers_file_path: str, training_data):
 
             error = desired_output - cleaned_neural_network_output 
 
-            weights[0] += np.multiply(image, error)
+            if (desired_output == cleaned_neural_network_output):
+                guessed_correctly += 1
 
-            # print(f'Shape: "{desired_output_str.strip()}", Output: {cleaned_neural_network_output:.1f}, Desired: {desired_output:.1f}')
+            weights[0] += np.multiply(image, error)
 
     with open('./weights.csv', 'w', encoding='utf-8') as weight_file:
         weight_file.write(str(list(weights[0]))[1: -1])
 
-    '''
-        fig, ax = plt.subplots()
-        mesh = ax.pcolormesh(np.arange(image_width), np.arange(image_height), np.reshape(weights[0], (image_width, image_height)))
-        cbar = plt.colorbar(mesh, ax=ax)
-        cbar.set_label('Pixel Values')
-        plt.show()
-    '''
+    return guessed_correctly / len(training_data)
 
+
+def train_cycles(answers_file_path, images, max_cycles: int) -> None:
+    
+    # It is necessary to cycle through and train with the same samples a couple of times.
+    for i in range(max_cycles):
+        print(f'\r\tTraining ... ({i + 1}/{max_cycles}) Cycles', end='')
+        percent_guess_correctly: float = train(answers_file_path, images)
+
+        # Passed most tests
+        if (percent_guess_correctly > 0.9999):
+            break
+        
+    print('\nDone Training.')
+    
 
 def main() -> None:
     num_samples = 100_000
@@ -60,14 +71,18 @@ def main() -> None:
     training_data = generate_training_data(answers_file_path, n=num_samples, image_width=image_width, image_height=image_height)
     flattened_training_data = [list(np.reshape(image, image_width * image_height)) for image in training_data]
 
-    # It is necessary to cycle through and train with the same samples a couple of times.
-    cycles: int = 500
-    for i in range(cycles):
-        print(f'\r\tTraining ... ({i + 1}/{cycles}) Cycles', end='')
-        train(answers_file_path, flattened_training_data)
-        
-    print('\nDone Training.')
-    
+    threads = []
+
+    for _ in range(10):
+        thread = threading.Thread(target=train_cycles, args=(answers_file_path, flattened_training_data, 50))
+        thread.start()
+        threads.append(thread)
+
+    for thread in threads:
+        thread.join()
+ 
+    print("Done!")
+
 
 if __name__ == "__main__":
     main()
