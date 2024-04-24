@@ -11,6 +11,9 @@
 '''
 
 
+from asyncio import wait
+from time import sleep
+import matplotlib.pyplot as plt
 import numpy as np
 import os
 from data_generator import generate_training_data
@@ -114,6 +117,7 @@ if __name__ == "__main__":
         
     except (InterruptedError): # Saves weight values if InterruptedError exception occurs
         pass
+    
     finally:
         with open('./weights.csv', 'w', encoding='utf-8') as weight_file:
             weight_file.write(str(list(weights))[1:-1])
