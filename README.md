@@ -1,11 +1,11 @@
 
 # Sub-Intelligence Mark-1
-This neural network is designed to be able to take an 20x20 image and detect whether the inputed image contains either a rectangle or a circle.
+This neural network is designed to be able to take an 20px $\times$ 20px gray-scale image and detect whether the inputed image contains either a rectangle or a circle.
 
 ## Neural Network Structure
 
-For this neural network, there is only one output layer neuron.
-There are no "hidden" neuron layers, and the input neuron values are a vector of floating point values with a length of 400 (20p x 20p) and values ranging from zero to one.
+For this simple neural network, there is only one output layer neuron.
+There are no "hidden" neuron layers, and the input neuron values are a vector of floating point values with a length of 400 (20px $\times$ 20px) and values ranging from zero to one.
 
 ### Input
 The neuron layer input vector $x$ is a vector of length "*number of input neurons*" $\rightarrow 20 \cdot 20 = 400$.
