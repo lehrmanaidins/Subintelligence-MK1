@@ -22,7 +22,7 @@ The neuron layer output vector $y$ is of length "*number of output neurons*" $\r
 To calculate the value of the single output neuron in this scenario, we can use this equation:
 ```math
     \left[ {\begin{array}{c}
-        y_{1} \\
+        y_{1}
     \end{array} } \right]
 
     = 
@@ -47,9 +47,18 @@ To calculate the value of the single output neuron in this scenario, we can use 
 
     \left[ {\begin{array}{c}
         b_{1} \\
-        b_{2} \\
-        \vdots \\
-        b_{400}
+    \end{array} } \right]
+```
+
+```math
+    \left[ {\begin{array}{c}
+        y_{1}
+    \end{array} } \right]
+
+    = 
+
+    \left[ {\begin{array}{c}
+        w_{1,1} \cdot x_{1} + w_{2,1} \cdot x_{2} \cdots + w_{400,1} \cdot x_400 + b_{1}
     \end{array} } \right]
 ```
 
