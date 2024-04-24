@@ -7,35 +7,37 @@ This neural network is designed to be able to take an 20x20 image and detect whe
 $y = W^Tx$
 
  - $y$ is new neuron layer values vector.
-$$ y =
+```math
+y =
 \left[ {\begin{array}{c}
 y_{1} \\
 y_{2} \\
 \vdots \\
 y_{n} \\
 \end{array} } \right]
-$$
+```
 
 - $W$ is the weight values matrix.
-$$ W_{n\times n} =
+```math
+W_{n\times n} =
 \left[ {\begin{array}{cccc}
 w_{1,1} & w_{1,2} & \cdots & w_{1,n}\\
 w_{2,1} & w_{2,2} & \cdots & w_{2,n}\\
 \vdots & \vdots & \ddots & \vdots\\
 w_{n,1} & w_{n,2} & \cdots & w_{n,n}\\
 \end{array} } \right]
-$$
+```
 
 - and $x$ is the previous/input neuron values vector.
-$$ x =
+```math
+x =
 \left[ {\begin{array}{c}
 x_{1} \\
 x_{2} \\
 \vdots \\
 x_{n} \\
 \end{array} } \right]
-$$
-
+```
 
 ## "The Great 70% Challenge"
 The neural network seems to struggle to get an accuracy of guessing the shapes over 70% no matter how many images 
