@@ -1,11 +1,27 @@
 
-# Sub-Intelligence Mark-I
+# Sub-Intelligence Mark-1
 This neural network is designed to be able to take an 20x20 image and detect whether the inputed image contains either a rectangle or a circle.
 
 ## Neural Network Structure
-### Network Layer Matrix-Vector Calculation
+
+For this neural network, there is only one output layer neuron.
+There are no "hidden" neuron layers, and the input neuron values are a vector of floating point values with a length of 400 (20p x 20p) and values ranging from zero to one.
+
+### Input
+The neuron layer input vector $x$ is a vector of length "*number of input neurons*" $\rightarrow 20 \cdot 20 = 400$.
+
+### Weights
+The neuron layer weight matrix $W$, by definition is of size "*number of input neurons*" $\times$ "*number of output neurons*" $\rightarrow 400 \times 1$.
+
+### Bias
+The neuron layer bias vector $b$ is a vector of length of the "*number of output neurons*" $\rightarrow 1$.
+
+### Output
+The neuron layer output vector $y$ is of length "*number of output neurons*" $\rightarrow 1$.
+
+### General Form Network Layer Matrix-Vector Calculation
 ```math
-    y = Wx + b$
+    y = W \cdot x + b$
 ```
 
  - $y$ is new neuron layer values vector.
@@ -56,6 +72,10 @@ b =
         b_{m}
     \end{array} } \right]
 ```
+
+## Example Network Layer Matrix-Vector Calculation
+
+
 
 ## "The Great 70% Challenge"
 The neural network seems to struggle to get an accuracy of guessing the shapes over 70% no matter how many images 
