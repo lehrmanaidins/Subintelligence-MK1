@@ -16,7 +16,7 @@ y =
         y_{1} \\
         y_{2} \\
         \vdots \\
-        y_{m} \\
+        y_{m}
     \end{array} } \right]
 ```
 
@@ -26,10 +26,10 @@ y =
 ```math
 W_{n \times m} =
     \left[ {\begin{array}{cccc}
-        w_{1,1} & w_{1,2} & \cdots & w_{1,m}\\
-        w_{2,1} & w_{2,2} & \cdots & w_{2,m}\\
-        \vdots & \vdots & \ddots & \vdots\\
-        w_{n,1} & w_{n,2} & \cdots & w_{n,m}\\
+        w_{1,1} & w_{1,2} & \cdots & w_{1,m} \\
+        w_{2,1} & w_{2,2} & \cdots & w_{2,m}  \\
+        \vdots & \vdots & \ddots & \vdots \\
+        w_{n,1} & w_{n,2} & \cdots & w_{n,m}
     \end{array} } \right]
 ```
 
@@ -41,7 +41,7 @@ x =
         x_{1} \\
         x_{2} \\
         \vdots \\
-        x_{n} \\
+        x_{n}
     \end{array} } \right]
 ```
 
@@ -53,7 +53,7 @@ b =
         b_{1} \\
         b_{2} \\
         \vdots \\
-        b_{m} \\
+        b_{m}
     \end{array} } \right]
 ```
 
