@@ -3,7 +3,6 @@
 This neural network is designed to be able to take an 20px $\times$ 20px gray-scale image and detect whether the inputed image contains either a rectangle or a circle.
 
 ## Neural Network Structure
-
 For this simple neural network, there is only one output layer neuron.
 There are no "hidden" neuron layers, and the input neuron values are a vector of floating point values with a length of 400 (20px $\times$ 20px) and values ranging from zero to one.
 
@@ -19,7 +18,42 @@ The neuron layer bias vector $b$ is a vector of length of the "*number of output
 ### Output
 The neuron layer output vector $y$ is of length "*number of output neurons*" $\rightarrow 1$.
 
-### General Form Network Layer Matrix-Vector Calculation
+### Neuron Layer Calculation
+To calculate the value of the single output neuron in this scenario, we can use this equation:
+```math
+    \left[ {\begin{array}{c}
+        y_{1} \\
+    \end{array} } \right]
+
+    = 
+
+    \left[ {\begin{array}{c}
+        w_{1,1} \\
+        w_{2,1} \\
+        \vdots \\
+        w_{400,1}
+    \end{array} } \right]
+
+    \cdot
+
+    \left[ {\begin{array}{c}
+        x_{1} \\
+        x_{2} \\
+        \vdots \\
+        x_{400}
+    \end{array} } \right]
+
+    + 
+
+    \left[ {\begin{array}{c}
+        b_{1} \\
+        b_{2} \\
+        \vdots \\
+        b_{400}
+    \end{array} } \right]
+```
+
+## General Form Network Layer Matrix-Vector Calculation
 ```math
     y = W \cdot x + b$
 ```
@@ -77,7 +111,7 @@ b =
 
 
 
-## "The Great 70% Challenge"
+## "The 70% Solution"
 The neural network seems to struggle to get an accuracy of guessing the shapes over 70% no matter how many images 
 are used to train. I have tried to train it with both 10,000 and 100,000 images, and, in both scenarios, the network 
 is correctly guessing the test shapes about 70% of the time. 
