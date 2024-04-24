@@ -7,7 +7,7 @@ This neural network is designed to be able to take an 20x20 image and detect whe
 $y = W^Tx$
 
  - $y$ is new neuron layer values vector.
-$$y =
+$$ y =
 \left[ {\begin{array}{c}
 y_{1} \\
 y_{2} \\
@@ -17,8 +17,7 @@ y_{n} \\
 $$
 
 - $W$ is the weight values matrix.
-$$
-W_{n\times n} =
+$$ W_{n\times n} =
 \left[ {\begin{array}{cccc}
 w_{1,1} & w_{1,2} & \cdots & w_{1,n}\\
 w_{2,1} & w_{2,2} & \cdots & w_{2,n}\\
@@ -28,8 +27,7 @@ w_{n,1} & w_{n,2} & \cdots & w_{n,n}\\
 $$
 
 - and $x$ is the previous/input neuron values vector.
-$$
-x =
+$$ x =
 \left[ {\begin{array}{c}
 x_{1} \\
 x_{2} \\
